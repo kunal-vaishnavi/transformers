@@ -442,6 +442,8 @@ class AutomaticSpeechRecognitionPipeline(ChunkPipeline):
             # `generate` magic to create the mask automatically won't work, we basically need to help
             # it here.
             attention_mask = model_inputs.pop("attention_mask", None)
+            if self.torch_dtype is not None:
+                inputs = inputs.to(dtype=self.torch_dtype)
             tokens = self.model.generate(
                 encoder_outputs=encoder(inputs, attention_mask=attention_mask),
                 attention_mask=attention_mask,
